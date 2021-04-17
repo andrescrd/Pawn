@@ -11,8 +11,10 @@
 // Sets default values
 AMainPlayer::AMainPlayer()
 {
+	bCanMove=true;
 	DeltaMovement = 100;
 	Speed = 50;
+	MovementRate = 0.8f;
 
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	MeshComponent->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECR_Overlap);
@@ -32,8 +34,8 @@ AMainPlayer::AMainPlayer()
 void AMainPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+	NewLocation = GetActorLocation();
 }
-
 
 // Called every frame
 void AMainPlayer::Tick(float DeltaTime)
@@ -55,13 +57,16 @@ void AMainPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 void AMainPlayer::MoveHorizontal(float Value)
 {
-	if (Value == 0 || IsMoving()) return;
-	(Value > 0) ? MoveRight() : MoveLeft();
+	if (Value == 0 || !CanMove()) return;
+	(Value > 0) ? MoveRight() : MoveLeft();	
+	DisableCanMove();	
 }
+
 void AMainPlayer::MoveVertical(float Value)
 {
-	if (Value == 0 || IsMoving()) return;
-	(Value > 0) ? MoveUp() : MoveDown();
+	if (Value == 0 || !CanMove()) return;
+	(Value > 0) ? MoveUp() : MoveDown();	
+	DisableCanMove();
 }
 
 void AMainPlayer::MoveUp()
@@ -104,4 +109,16 @@ bool AMainPlayer::HasWallCollision(const FVector RelativeLocation) const
 	return Result.Num() > 0;
 }
 
-bool AMainPlayer::IsMoving() const { return GetVelocity().Size() > 0; }
+void AMainPlayer::DisableCanMove()
+{
+	bCanMove = false;	
+	GetWorld()->GetTimerManager().SetTimer(CanMove_TimerHandle,this,&AMainPlayer::EnableCanMove,MovementRate,false);
+}
+
+void AMainPlayer::EnableCanMove()
+{
+	bCanMove=true;
+	GetWorld()->GetTimerManager().ClearTimer(CanMove_TimerHandle);
+}
+
+bool AMainPlayer::CanMove() const { return  (NewLocation - GetActorLocation()).Size() == 0 && bCanMove; }

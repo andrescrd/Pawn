@@ -17,38 +17,44 @@ public:
 	// Sets default values for this pawn's properties
 	AMainPlayer();
 
-protected:	
+protected:
+	FTimerHandle CanMove_TimerHandle;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UStaticMeshComponent* MeshComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)	
 	class UBoxComponent* BoxComponent;
 
-
 	UPROPERTY(VisibleInstanceOnly)
 	FVector NewLocation;
+	UPROPERTY(VisibleInstanceOnly)	
+	bool bCanMove;
 	UPROPERTY(EditDefaultsOnly)
 	float DeltaMovement;
 	UPROPERTY(EditDefaultsOnly)	
 	float Speed;
+	UPROPERTY(EditDefaultsOnly)
+	float MovementRate;
 
 	virtual void BeginPlay() override;
 
 	void MoveHorizontal(float Value);
-	bool IsMoving() const;
 	void MoveVertical(float Value);
-	// void SetDestination(FVector NewLocation) const;
 
-	bool HasWallCollision(const FVector RelativeLocation) const;
 	void MoveUp();
 	void MoveDown();
 	void MoveRight();
 	void MoveLeft();
 
+	bool HasWallCollision(const FVector RelativeLocation) const;
+
+	bool CanMove() const;
+	void EnableCanMove();
+	void DisableCanMove();
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 };
