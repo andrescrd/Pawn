@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 
+
+#include "Actors/Follower.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Pawn.h"
 #include "MainPlayer.generated.h"
@@ -19,6 +21,7 @@ public:
 
 protected:
 	FTimerHandle CanMove_TimerHandle;
+	TSet<class AFollower*> Followers;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UStaticMeshComponent* MeshComponent;
@@ -57,4 +60,5 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 };

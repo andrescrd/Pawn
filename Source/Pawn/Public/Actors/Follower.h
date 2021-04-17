@@ -4,10 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interfaces/Progressor.h"
+#include "Players/MainPlayer.h"
+
 #include "Follower.generated.h"
 
 UCLASS()
-class PAWN_API AFollower : public AActor
+class PAWN_API AFollower : public AActor, public IProgressor
 {
 	GENERATED_BODY()
 	
@@ -16,14 +19,25 @@ public:
 	AFollower();
 
 protected:
+	
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UStaticMeshComponent* MeshComponent;
-	
+
+	UPROPERTY()
+	class APawn* OwnTarget;
+	UPROPERTY()
+	FVector NewLocation;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	float Speed;
+
+	bool CanMove() const;
 	virtual void BeginPlay() override;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void SetTarget(class APawn* NewTarget);
+	virtual void OnProgress() override;
 };

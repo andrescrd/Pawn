@@ -35,6 +35,7 @@ void AMainPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	NewLocation = GetActorLocation();
+	
 }
 
 // Called every frame
@@ -53,6 +54,20 @@ void AMainPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	PlayerInputComponent->BindAxis("Horizontal", this, &AMainPlayer::MoveHorizontal);
 	PlayerInputComponent->BindAxis("Vertical", this, &AMainPlayer::MoveVertical);
+}
+
+void AMainPlayer::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	if(!OtherActor->IsA(AFollower::StaticClass()))
+		return;
+
+	auto CurrentFollower = Cast<AFollower>(OtherActor);
+	
+	if (!Followers.Contains(CurrentFollower))
+	{
+		Followers.Add(CurrentFollower);
+		CurrentFollower->SetTarget(this);
+	}
 }
 
 void AMainPlayer::MoveHorizontal(float Value)
