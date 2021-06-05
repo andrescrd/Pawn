@@ -5,8 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Interfaces/Progressor.h"
-#include "Players/MainPlayer.h"
-
 #include "Follower.generated.h"
 
 UCLASS()
@@ -25,7 +23,7 @@ protected:
 	class UStaticMeshComponent* MeshComponent;
 
 	UPROPERTY()
-	class APawn* OwnTarget;
+	class AActor* OwnTarget;
 	UPROPERTY()
 	FVector NewLocation;
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
@@ -38,6 +36,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void SetTarget(class APawn* NewTarget);
+	void SetTarget(class AActor* NewTarget);
 	virtual void OnProgress() override;
 };

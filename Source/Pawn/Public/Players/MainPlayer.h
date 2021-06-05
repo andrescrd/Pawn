@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 
-
-#include "Actors/Follower.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Pawn.h"
 #include "MainPlayer.generated.h"
@@ -22,6 +20,7 @@ public:
 protected:
 	FTimerHandle CanMove_TimerHandle;
 	TSet<class AFollower*> Followers;
+	TSet<class IProgressor*> Progressors;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UStaticMeshComponent* MeshComponent;
@@ -38,9 +37,11 @@ protected:
 	float Speed;
 	UPROPERTY(EditDefaultsOnly)
 	float MovementRate;
+	class USceneComponent* Root;
 
 	virtual void BeginPlay() override;
 
+	void MoveFollowers();
 	void MoveHorizontal(float Value);
 	void MoveVertical(float Value);
 
@@ -54,6 +55,7 @@ protected:
 	bool CanMove() const;
 	void EnableCanMove();
 	void DisableCanMove();
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

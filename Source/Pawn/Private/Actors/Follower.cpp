@@ -34,7 +34,7 @@ void AFollower::Tick(float DeltaTime)
 
 bool AFollower::CanMove() const { return OwnTarget != nullptr; }
 
-void AFollower::SetTarget(APawn* NewTarget) { OwnTarget = NewTarget; }
+void AFollower::SetTarget(AActor* NewTarget) { OwnTarget = NewTarget; }
 
 void AFollower::OnProgress()
 {
