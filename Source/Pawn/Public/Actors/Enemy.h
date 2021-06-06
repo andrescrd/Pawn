@@ -33,7 +33,7 @@ protected:
 	int NumberMovement;
 
 	virtual void BeginPlay() override;
-	bool GetDirection();
+	void GetDirection();
 
 public:	
 	// Called every frame

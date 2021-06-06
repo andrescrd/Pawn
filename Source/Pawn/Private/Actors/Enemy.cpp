@@ -33,12 +33,12 @@ void AEnemy::Tick(float DeltaTime)
 
 void AEnemy::OnProgress()
 {
-	const bool bIsForward = GetDirection();
-	const auto Forward = GetActorForwardVector() * (bIsForward ? DeltaMovement : -DeltaMovement);
-	AddActorLocalOffset(Forward);
+	auto Location = GetActorLocation();
+	Location += GetActorForwardVector() * DeltaMovement;
+	SetActorLocation(Location);
 }
 
-bool AEnemy::GetDirection()
+void AEnemy::GetDirection()
 {
 	if (bIsMoveForward)
 	{
@@ -46,7 +46,7 @@ bool AEnemy::GetDirection()
 		{
 			bIsMoveForward = false;
 			CurrentMovement--;
-			AddActorLocalRotation(FRotator(0, 180, 0));
+			AddActorLocalRotation(FRotator(0, -180, 0));
 		}
 
 		CurrentMovement++;
@@ -57,11 +57,9 @@ bool AEnemy::GetDirection()
 		{
 			bIsMoveForward = true;
 			CurrentMovement++;
-			AddActorLocalRotation(FRotator(0, -180, 0));
+			AddActorLocalRotation(FRotator(0, 180, 0));
 		}
 
 		CurrentMovement--;
 	}
-
-	return bIsMoveForward;
 }
