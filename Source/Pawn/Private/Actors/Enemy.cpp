@@ -33,12 +33,13 @@ void AEnemy::Tick(float DeltaTime)
 
 void AEnemy::OnProgress()
 {
+	SetupDirection();
 	auto Location = GetActorLocation();
 	Location += GetActorForwardVector() * DeltaMovement;
-	SetActorLocation(Location);
+	SetActorLocation(Location, true);
 }
 
-void AEnemy::GetDirection()
+void AEnemy::SetupDirection()
 {
 	if (bIsMoveForward)
 	{
